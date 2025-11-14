@@ -127,7 +127,7 @@
       color: #fff;
       right: 10%;
       bottom: 0;
-      width: auto;
+      width: auto;   /* garante botão pequeno */
       height: auto;
     }
 
@@ -204,7 +204,7 @@
       input.value = val;
     };
 
-    // Botão "Não" foge dentro da área de botões
+    // Botão "Não" foge dentro da área dos botões
     function moveNoButton() {
       var wrapper = document.getElementById("buttonsWrapper");
       var btn = document.getElementById("noBtn");
@@ -218,11 +218,17 @@
       var x = Math.random() * maxX;
       var y = Math.random() * maxY;
 
+      // posição nova
       btn.style.left = x + "px";
-      btn.style.top = y + "px";
+      btn.style.top  = y + "px";
+
+      // >>> CORREÇÃO IMPORTANTE <<<
+      // remove right/bottom pra ele não esticar
+      btn.style.right  = "auto";
+      btn.style.bottom = "auto";
     }
 
-    // Botão "Sim" → abre WhatsApp pelo Safari
+    // Botão "Sim" → WhatsApp
     function sendWhatsApp() {
       var input = document.getElementById("visitDate");
       if (!input.value) {
@@ -240,7 +246,6 @@
 
       var url = "https://wa.me/5551989598863?text=" + encodeURIComponent(msg);
 
-      // Navegação simples – Safari iOS interpreta bem
       window.location.href = url;
     }
   </script>

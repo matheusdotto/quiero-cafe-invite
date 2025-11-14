@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convite Quiero Café</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #fff;
+
+      background-image: url("https://i0.wp.com/quegostoso.tur.br/wp-content/uploads/2023/06/Rede-gaucha-Quiero-Cafe-chega-a-Sao-Paulo-Foto-Divulgacao-Quiero-Cafe.jpg?fit=800%2C533&ssl=1");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: -1;
+    }
+
+    .card {
+      max-width: 520px;
+      width: 100%;
+      background: rgba(15, 15, 15, 0.92);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .address {
+      font-size: 0.9rem;
+      color: #ddd;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: none;
+      background: #2b2b2b;
+      color: #fff;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+
+    .info {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: #ccc;
+    }
+
+    .week-list {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: #eee;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .week-list li::before {
+      content: "• ";
+      color: #ff4b4b;
+    }
+
+    .buttons-wrapper {
+      margin-top: 22px;
+      position: relative;
+      height: 90px;
+      overflow: hidden;
+    }
+
+    button {
+      padding: 12px 22px;
+      font-size: 1rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      position: absolute;
+    }
+
+    #yesBtn {
+      background: #27ae60;
+      color: #fff;
+      left: 10%;
+      bottom: 0;
+    }
+
+    #noBtn {
+      background: #e74c3c;
+      color: #fff;
+      right: 10%;
+      bottom: 0;
+      width: auto;
+      height: auto;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      text-align: center;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Convite para Thaina Cota 💛</h1>
+
+    <p>
+      Thaina Cota, você está convidada para tomar um café comigo no
+      <strong>Quiero Café</strong>!
+    </p>
+
+    <p class="address">
+      Quiero Café<br>
+      Rua Vilela, 665 – São Paulo/SP – 03314-000
+    </p>
+
+    <label for="visitDate">Escolha o dia da visita (a partir de hoje):</label>
+    <input type="date" id="visitDate" />
+
+    <div class="info"><strong>Horário fixo: 19:00</strong></div>
+
+    <ul class="week-list">
+      <li>Segunda – 19:00</li>
+      <li>Terça – 19:00</li>
+      <li>Quarta – 19:00</li>
+      <li>Quinta – 19:00</li>
+      <li>Sexta – 19:00</li>
+      <li>Sábado – 19:00</li>
+      <li>Domingo – 19:00</li>
+    </ul>
+
+    <div class="buttons-wrapper" id="buttonsWrapper">
+      <button id="yesBtn"
+              type="button"
+              onclick="sendWhatsApp()"
+              ontouchstart="sendWhatsApp()">
+        Sim, vou! 💛
+      </button>
+
+      <button id="noBtn"
+              type="button"
+              onclick="moveNoButton(); return false;"
+              ontouchstart="moveNoButton(); return false;">
+        Não 😅
+      </button>
+    </div>
+
+    <div class="hint">
+      *O botão “Não” foge mesmo… melhor aceitar o café 😜
+    </div>
+  </div>
+
+  <script>
+    // Define data mínima = hoje
+    window.onload = function () {
+      var t = new Date();
+      var y = t.getFullYear();
+      var m = ("0" + (t.getMonth() + 1)).slice(-2);
+      var d = ("0" + t.getDate()).slice(-2);
+      var val = y + "-" + m + "-" + d;
+
+      var input = document.getElementById("visitDate");
+      input.min = val;
+      input.value = val;
+    };
+
+    // Botão "Não" foge dentro da área de botões
+    function moveNoButton() {
+      var wrapper = document.getElementById("buttonsWrapper");
+      var btn = document.getElementById("noBtn");
+
+      var maxX = wrapper.clientWidth - btn.offsetWidth;
+      var maxY = wrapper.clientHeight - btn.offsetHeight;
+
+      if (maxX < 0) maxX = 0;
+      if (maxY < 0) maxY = 0;
+
+      var x = Math.random() * maxX;
+      var y = Math.random() * maxY;
+
+      btn.style.left = x + "px";
+      btn.style.top = y + "px";
+    }
+
+    // Botão "Sim" → abre WhatsApp pelo Safari
+    function sendWhatsApp() {
+      var input = document.getElementById("visitDate");
+      if (!input.value) {
+        alert("Escolha uma data.");
+        return;
+      }
+
+      var p = input.value.split("-");
+      var dataFormat = p[2] + "/" + p[1] + "/" + p[0];
+
+      var msg =
+"Olá, aqui é a Thaina Cota!\n" +
+"Confirmo minha visita ao Quiero Café dia " + dataFormat + " às 19:00.\n\n" +
+"Endereço:\nRua Vilela, 665 – São Paulo/SP – 03314-000.";
+
+      var url = "https://wa.me/5551989598863?text=" + encodeURIComponent(msg);
+
+      // Navegação simples – Safari iOS interpreta bem
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>
